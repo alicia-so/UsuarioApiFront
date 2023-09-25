@@ -1,0 +1,11 @@
+{
+  "prettier.configPath": "./.prettierrc.json",
+  "code-runner.executorMap": {
+    "javascript": "node",
+    "typescript": "cls && npx ts-node --files",
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+    "source.fixAll": true
+  },
+}
