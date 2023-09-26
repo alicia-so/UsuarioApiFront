@@ -5,11 +5,6 @@ const nextConfig = {
     locales: ["pt-BR"],
     defaultLocale: "pt-BR",
   },
-  modularizeImports: {
-    "@mui/icons-material": {
-      transform: "@mui/icons-material/{{member}}",
-    },
-  },
   images: {
     domains: [
       // confiable domains for images
@@ -20,11 +15,6 @@ const nextConfig = {
       "res-4.cloudinary.com",
       "res-5.cloudinary.com",
     ],
-  },
-  modularizeImports: {
-    "@mui/icons-material": {
-      transform: "@mui/icons-material/{{member}}",
-    },
   },
 };
 

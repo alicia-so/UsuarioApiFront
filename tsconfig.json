@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "target": "es2017",
+    "lib": ["es6","dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -17,12 +13,22 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "baseUrl": ".",
+    "jsxImportSource": "@emotion/react",
     "incremental": true,
+    "baseUrl": ".",
     "paths": {
-      "@/*": [
+      "~/*": [
         "./src/*"
-      ]
+      ],
+      "@components/*": ["src/components/*"],
+      "@utility/*": ["src/utility/*"],
+      "@assets/*": ["public/assets/*"],
+      "@images/*": ["public/assets/images/*"],
+      "@fonts/*": ["public/assets/fonts/*"],
+      "@pages/*": ["src/pages/*"],
+      "@templates/*": ["src/templates/*"],
+      "@sections/*": ["src/sections/*"],
+      "@styles/*": ["src/styles/*"],
     },
     "plugins": [
       {
@@ -30,13 +36,6 @@
       }
     ]
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts"
-, "src/app/sitemap.ts"  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/data"],
+  "exclude": ["node_modules"]
 }
