@@ -24,7 +24,11 @@ export default function Header({ session }: { session: Session | null }) {
           </IconButton>
 
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            {session ? " Minhas Fichas Médicas" : "Gerenciar Fichas Médicas"}
+            {!session
+              ? "App Fichas Médicas"
+              : session?.user.role === "paciente"
+              ? " Minhas Fichas Médicas"
+              : "Gerenciar Fichas Médicas"}
           </Typography>
 
           {session && (
@@ -34,9 +38,15 @@ export default function Header({ session }: { session: Session | null }) {
           )}
 
           {!session && (
-            <Button color="inherit" onClick={() => signIn()}>
-              Login
-            </Button>
+            <>
+              <Button color="inherit" onClick={() => signIn()}>
+                Login
+              </Button>
+
+              <Button color="inherit" href="/signup">
+                Register
+              </Button>
+            </>
           )}
         </Toolbar>
       </AppBar>

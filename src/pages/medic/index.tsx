@@ -1,74 +1,84 @@
 // components
+import { Typography } from "@mui/material";
 import { useSession } from "next-auth/react";
 import Header from "~/components/Header";
 import MainContent from "~/sections/MainContent";
+import { useEffect, useState } from "react";
 
 export type MedicalRecord = {
   id: number;
-  pacientName: string;
+  fullName: string;
   phoneNumber: string;
-  description: string;
-  createdAt: string;
-  updatedAt: string;
 };
 
-const medicalRecords = [
-  {
-    id: 1,
-    name: "Ficha 1",
-    description: "Ficha 1",
-    pacientName: "Paciente 1",
-    phoneNumber: "123456789",
-    createdAt: "2021-10-01T00:00:00.000Z",
-    updatedAt: "2021-10-01T00:00:00.000Z",
-  },
-  {
-    id: 2,
-    name: "Ficha 2",
-    description: "Ficha 2",
-    pacientName: "Paciente 1",
-    phoneNumber: "123456789",
-    createdAt: "2021-10-01T00:00:00.000Z",
-    updatedAt: "2021-10-01T00:00:00.000Z",
-  },
-  {
-    id: 3,
-    name: "Ficha 3",
-    description: "Ficha 3",
-    pacientName: "Paciente 1",
-    phoneNumber: "123456789",
-    createdAt: "2021-10-01T00:00:00.000Z",
-    updatedAt: "2021-10-01T00:00:00.000Z",
-  },
-  {
-    id: 4,
-    name: "Ficha 13",
-    description: "Ficha 13",
-    pacientName: "Paciente 2",
-    phoneNumber: "12345423",
-    createdAt: "2021-10-01T00:00:00.000Z",
-    updatedAt: "2021-10-01T00:00:00.000Z",
-  },
-  {
-    id: 5,
-    name: "Ficha 32",
-    description: "Ficha 32",
-    pacientName: "Paciente 34",
-    phoneNumber: "3123",
-    createdAt: "2021-10-01T00:00:00.000Z",
-    updatedAt: "2021-10-01T00:00:00.000Z",
-  },
-];
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 export default function Index() {
   const { data: session } = useSession();
-  return (
-    <>
-      <Header session={session}></Header>
+  console.log("🚀 ~ file: index.tsx:18 ~ Index ~ session:", session);
+  const [medicalRecords, setMedicalRecords] = useState<MedicalRecord[] | null>(null);
 
-      <main>
-        <MainContent medicalRecords={medicalRecords}></MainContent>
-      </main>
-    </>
-  );
+  useEffect(() => {
+    const getAllMedicalRecords = async () => {
+      const response = await fetch(`${baseUrl}/fichaMedica/getAll`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer  ${session?.user.accessToken}`,
+        },
+      });
+
+      const data = await response.json();
+      console.log("🚀 ~ file: index.tsx:30 ~ getAllMedicalRecords ~ data:", data);
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const medicalRecords = data.map((medicalRecord: any) => {
+        return {
+          id: medicalRecord.id,
+          fullName: medicalRecord.fullName,
+          phoneNumber: medicalRecord.phoneNumber,
+        } as MedicalRecord;
+      });
+      return medicalRecords;
+    };
+
+    if (!session) return;
+    getAllMedicalRecords().then((medicalRecords) => {
+      setMedicalRecords(medicalRecords);
+    });
+  }, [setMedicalRecords, session]);
+
+  if (!medicalRecords) {
+    return (
+      <>
+        <Header session={session}></Header>
+
+        <main>
+          <Typography>Não há fichas médicas cadastradas. </Typography>
+        </main>
+      </>
+    );
+  }
+
+  if (session?.user.role === "Medico") {
+    return (
+      <>
+        <Header session={session}></Header>
+
+        <main>
+          <MainContent medicalRecords={medicalRecords}></MainContent>
+        </main>
+      </>
+    );
+  } else {
+    return (
+      <>
+        <Header session={session}></Header>
+
+        <main>
+          <Typography>Você não tem permissão para acessar essa página. </Typography>
+        </main>
+      </>
+    );
+  }
 }

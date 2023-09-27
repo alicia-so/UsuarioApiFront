@@ -1,6 +1,8 @@
 // components
+import { Button, Stack, Typography } from "@mui/material";
 import { useSession } from "next-auth/react";
 import Header from "~/components/Header";
+import SectionContainer from "~/components/SectionContainer";
 import MainContent from "~/sections/MainContent";
 
 export type MedicalRecord = {
@@ -13,44 +15,31 @@ export type MedicalRecord = {
   updatedAt: string;
 };
 
-const medicalRecords = [
-  {
-    id: 1,
-    name: "Ficha 1",
-    description: "Ficha 1",
-    pacientName: "Paciente 1",
-    phoneNumber: "123456789",
-    createdAt: "2021-10-01T00:00:00.000Z",
-    updatedAt: "2021-10-01T00:00:00.000Z",
-  },
-  {
-    id: 2,
-    name: "Ficha 2",
-    description: "Ficha 2",
-    pacientName: "Paciente 1",
-    phoneNumber: "123456789",
-    createdAt: "2021-10-01T00:00:00.000Z",
-    updatedAt: "2021-10-01T00:00:00.000Z",
-  },
-  {
-    id: 3,
-    name: "Ficha 3",
-    description: "Ficha 3",
-    pacientName: "Paciente 1",
-    phoneNumber: "123456789",
-    createdAt: "2021-10-01T00:00:00.000Z",
-    updatedAt: "2021-10-01T00:00:00.000Z",
-  },
-];
-
 export default function Index() {
   const { data: session } = useSession();
+  console.log("🚀 ~ file: index.tsx:20 ~ Index ~ session:", session);
+
   return (
     <>
       <Header session={session}></Header>
-
       <main>
-        <MainContent medicalRecords={medicalRecords}></MainContent>
+        <SectionContainer>
+          <Stack direction="column" spacing={1}>
+            <Typography variant="h1">Bem vindo!</Typography>
+
+            {session?.user.role === "Paciente" && (
+              <Button size="small" href="/pacient">
+                Ver suas fichas médicas
+              </Button>
+            )}
+
+            {session?.user.role === "Medico" && (
+              <Button size="small" href="/medic">
+                Lista de fichas médicas
+              </Button>
+            )}
+          </Stack>
+        </SectionContainer>
       </main>
     </>
   );

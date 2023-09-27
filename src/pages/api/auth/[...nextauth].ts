@@ -1,6 +1,7 @@
-import NextAuth from "next-auth"
+import NextAuth, { Session, TokenSet } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
 export const authOptions = {
   // Configure one or more authentication providers
   providers: [
@@ -12,8 +13,8 @@ export const authOptions = {
       // e.g. domain, username, password, 2FA token, etc.
       // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {
-        username: { label: "Username", type: "text", placeholder: "jsmith" },
-        password: { label: "Password", type: "password" }
+        email: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
         // You need to provide your own logic here that takes the credentials
@@ -22,37 +23,59 @@ export const authOptions = {
         // e.g. return { id: 1, name: 'J Smith', email: 'jsmith@example.com' }
         // You can also use the `req` object to obtain additional parameters
         // (i.e., the request IP address)
-        const res = await fetch("/your/endpoint", {
+        const res = await fetch(`${baseUrl}/user/login`, {
           method: 'POST',
-          body: JSON.stringify(credentials),
+          body: JSON.stringify({
+            email: credentials?.email,
+            password: credentials?.password
+          }),
           headers: { "Content-Type": "application/json" }
         })
-        const user = await res.json()
+        const user = await res.json();
 
         // If no error and we have user data, return it
         if (res.ok && user) {
-          return user
+          return {
+            id: user.user.id as string,
+            name: user.user.fullName,
+            email: user.user.email,
+            phoneNumber: user.user.phoneNumber,
+            role: user.user.perfis.descricao,
+            token: user.token
+          }
         }
         // Return null if user data could not be retrieved
-        return null
+        return null;
       },
-
     })
   ],
+  secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
-    async jwt({ token, account }: { token: any, account: any }) {
-      // Persist the OAuth access_token to the token right after signin
-      if (account) {
-        token.accessToken = account.access_token
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    async jwt({ token, user, account } : any) {
+
+      if (account && user) {
+        return {
+          ...token,
+          accessToken: user.token,
+          role: user.role
+        };
       }
-      return token
+
+      return token;
     },
-    async session({ session, token, user }: { session: any, token: any, user: any }) {
-      // Send properties to the client, like an access_token from a provider.
-      session.accessToken = token.accessToken
-      return session
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    async session({ session, token }: {
+      session: Session;
+      token: TokenSet;
+    }) {
+      session.user.accessToken = token.accessToken as string;
+      session.user.role = token.role as string;
+
+      return session;
     }
-  }
+  },
+
 }
 
 export default NextAuth(authOptions)

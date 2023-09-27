@@ -2,7 +2,7 @@
 import { Stack } from "@mui/material";
 import MedicalRecordCard from "~/components/MedicalRecordCard";
 import SectionContainer from "~/components/SectionContainer";
-import { MedicalRecord } from "~/pages";
+import { MedicalRecord } from "~/pages/medic";
 // sections
 
 export default function MainContent({

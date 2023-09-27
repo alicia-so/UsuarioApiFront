@@ -3,7 +3,7 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { MedicalRecord } from "~/pages";
+import { MedicalRecord } from "~/pages/medic";
 import { useSession } from "next-auth/react";
 
 export default function MedicalRecordCard({
@@ -16,21 +16,19 @@ export default function MedicalRecordCard({
     <Card sx={{ minWidth: 275 }}>
       <CardContent>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          {medicalRecord.pacientName}
+          {medicalRecord.fullName}
         </Typography>
 
         <Typography variant="h5" component="div">
-          {medicalRecord.name}
+          {medicalRecord.id}
         </Typography>
 
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
           {medicalRecord.phoneNumber}
         </Typography>
-
-        <Typography variant="body2">{medicalRecord.description}</Typography>
       </CardContent>
 
-      {session && (
+      {session?.user.role === "Paciente" && (
         <CardActions>
           <Button
             size="small"
@@ -42,7 +40,7 @@ export default function MedicalRecordCard({
         </CardActions>
       )}
 
-      {!session && (
+      {session?.user.role === "Medico" && (
         <CardActions>
           <Button size="small" href="#" target="_blank">
             Editar
