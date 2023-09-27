@@ -26,7 +26,7 @@ export default function Header({ session }: { session: Session | null }) {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             {!session
               ? "App Fichas Médicas"
-              : session?.user.role === "paciente"
+              : session?.user.role === "Paciente"
               ? " Minhas Fichas Médicas"
               : "Gerenciar Fichas Médicas"}
           </Typography>
