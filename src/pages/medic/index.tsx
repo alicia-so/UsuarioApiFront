@@ -15,7 +15,6 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 export default function Index() {
   const { data: session } = useSession();
-  console.log("🚀 ~ file: index.tsx:18 ~ Index ~ session:", session);
   const [medicalRecords, setMedicalRecords] = useState<MedicalRecord[] | null>(null);
 
   useEffect(() => {
@@ -29,7 +28,6 @@ export default function Index() {
       });
 
       const data = await response.json();
-      console.log("🚀 ~ file: index.tsx:30 ~ getAllMedicalRecords ~ data:", data);
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const medicalRecords = data.map((medicalRecord: any) => {

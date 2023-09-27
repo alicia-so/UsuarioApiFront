@@ -1,5 +1,5 @@
 // components
-import { Stack } from "@mui/material";
+import { Button, Stack } from "@mui/material";
 import MedicalRecordCard from "~/components/MedicalRecordCard";
 import SectionContainer from "~/components/SectionContainer";
 import { MedicalRecord } from "~/pages/medic";
@@ -13,6 +13,10 @@ export default function MainContent({
   return (
     <>
       <SectionContainer>
+        <Stack>
+          <Button></Button>
+        </Stack>
+
         <Stack
           useFlexGap
           direction="row"
