@@ -8,6 +8,7 @@ import { useSession } from "next-auth/react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Session } from "next-auth";
 import { useRouter } from "next/router";
+import { Stack } from "@mui/material";
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 export default function MedicalRecordCard({
@@ -71,18 +72,17 @@ export default function MedicalRecordCard({
       )}
 
       {session?.user.role === "Medico" && (
-        <CardActions>
+        <Stack direction="row" width="100%" justifyContent="space-between" px={2}>
           <Button size="small" href="#" target="_blank">
             Editar
           </Button>
-
           <Button
             size="small"
             onClick={() => deleteMedicalRecord(medicalRecord, session)}
           >
             <DeleteIcon></DeleteIcon>
           </Button>
-        </CardActions>
+        </Stack>
       )}
     </Card>
   );

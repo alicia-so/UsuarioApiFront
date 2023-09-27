@@ -48,6 +48,8 @@ export default function Index() {
     if (!res.ok) console.error(json.message);
 
     alert("Success!");
+
+    router.push("/medic");
   }
   useEffect(() => {
     async function getPacientes() {
