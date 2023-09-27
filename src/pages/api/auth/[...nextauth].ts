@@ -1,4 +1,5 @@
-import NextAuth, { Session, TokenSet } from "next-auth"
+import NextAuth, { Account, Session, TokenSet } from "next-auth"
+import { AdapterUser } from "next-auth/adapters"
 import CredentialsProvider from "next-auth/providers/credentials"
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
@@ -57,6 +58,7 @@ export const authOptions = {
       if (account && user) {
         return {
           ...token,
+          id: account.providerAccountId,
           accessToken: user.token,
           role: user.role
         };
@@ -70,6 +72,7 @@ export const authOptions = {
       token: TokenSet;
     }) {
       session.user.accessToken = token.accessToken as string;
+      session.user.id = token.id as string;
       session.user.role = token.role as string;
 
       return session;

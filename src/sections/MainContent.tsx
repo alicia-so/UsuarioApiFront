@@ -1,5 +1,6 @@
 // components
 import { Button, Stack } from "@mui/material";
+import { useSession } from "next-auth/react";
 import MedicalRecordCard from "~/components/MedicalRecordCard";
 import SectionContainer from "~/components/SectionContainer";
 import { MedicalRecord } from "~/pages/medic";
@@ -10,12 +11,16 @@ export default function MainContent({
 }: {
   medicalRecords: MedicalRecord[];
 }) {
+  const { data: session } = useSession();
+
   return (
     <>
       <SectionContainer>
-        <Stack>
-          <Button></Button>
-        </Stack>
+        {session?.user.role === "Medico" && (
+          <Stack>
+            <Button href="/ficha/create">Criar Ficha</Button>
+          </Stack>
+        )}
 
         <Stack
           useFlexGap
