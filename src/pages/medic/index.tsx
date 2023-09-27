@@ -7,8 +7,15 @@ import { useEffect, useState } from "react";
 
 export type MedicalRecord = {
   id: number;
-  fullName: string;
-  phoneNumber: string;
+  descricao: string;
+  paciente: {
+    fullName: string;
+    phoneNumber: string;
+  };
+  medico: {
+    fullName: string;
+    phoneNumber: string;
+  };
 };
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -33,8 +40,15 @@ export default function Index() {
       const medicalRecords = data.map((medicalRecord: any) => {
         return {
           id: medicalRecord.id,
-          fullName: medicalRecord.fullName,
-          phoneNumber: medicalRecord.phoneNumber,
+          descricao: medicalRecord.descricao,
+          paciente: {
+            fullName: medicalRecord.paciente.fullName,
+            phoneNumber: medicalRecord.paciente.phoneNumber,
+          },
+          medico: {
+            fullName: medicalRecord.medico.fullName,
+            phoneNumber: medicalRecord.medico.phoneNumber,
+          },
         } as MedicalRecord;
       });
       return medicalRecords;

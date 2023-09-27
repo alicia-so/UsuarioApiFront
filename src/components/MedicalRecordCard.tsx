@@ -7,6 +7,7 @@ import { MedicalRecord } from "~/pages/medic";
 import { useSession } from "next-auth/react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Session } from "next-auth";
+import { useRouter } from "next/router";
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 export default function MedicalRecordCard({
@@ -15,6 +16,7 @@ export default function MedicalRecordCard({
   medicalRecord: MedicalRecord;
 }) {
   const { data: session } = useSession();
+  const router = useRouter();
 
   const deleteMedicalRecord = async (
     medicalRecord: MedicalRecord,
@@ -26,30 +28,33 @@ export default function MedicalRecordCard({
       {
         method: "DELETE",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer  ${session?.user.accessToken}`,
         },
       },
-    );
-
-    const data = await response.json();
-
-    return data;
+    ).then(() => {
+      router.reload();
+    });
+    return response;
   };
 
   return (
     <Card sx={{ minWidth: 275 }}>
       <CardContent>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          {medicalRecord.fullName}
+          Médico: {medicalRecord.medico.fullName}
         </Typography>
 
-        <Typography variant="h5" component="div">
-          {medicalRecord.id}
+        <Typography sx={{ fontSize: 14 }} color="text.primary">
+          Paciente: {medicalRecord.paciente.fullName}
         </Typography>
 
-        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          {medicalRecord.phoneNumber}
+        <Typography sx={{ fontSize: 14 }} color="text.secondary">
+          Telefone Paciente: {medicalRecord.paciente.phoneNumber}
+        </Typography>
+
+        <Typography variant="body2">
+          {medicalRecord.descricao}
+          <br />
         </Typography>
       </CardContent>
 
