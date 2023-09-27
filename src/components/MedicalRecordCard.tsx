@@ -73,9 +73,10 @@ export default function MedicalRecordCard({
 
       {session?.user.role === "Medico" && (
         <Stack direction="row" width="100%" justifyContent="space-between" px={2}>
-          <Button size="small" href="#" target="_blank">
+          <Button size="small" href={`/ficha/edit?id=${medicalRecord.id}`}>
             Editar
           </Button>
+
           <Button
             size="small"
             onClick={() => deleteMedicalRecord(medicalRecord, session)}
